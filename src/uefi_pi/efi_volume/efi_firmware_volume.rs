@@ -1,6 +1,7 @@
 use core::fmt;
+use std::collections::HashMap;
 
-use crate::{uefi_pi::{UefiFvError, UefiFvlResult, efi_volume::{efi_fv_block_map::{EfiFvBlockMapEntry, load_block_map_entries}, efi_fvb_attributes_2::EfiFvbAttributes2, efi_guid::{EFI_VOL_GUID_SZ, EfiGuid}}}, util::{read_data_slice_n, read_data_slice_u8, read_data_slice_u16, read_data_slice_u32, read_data_slice_u64}};
+use crate::{uefi_pi::{UefiFvError, UefiFvlResult, efi_volume::{efi_ffs_file::EfiFfsFile, efi_fv_block_map::{EfiFvBlockMapEntry, load_block_map_entries}, efi_fvb_attributes_2::EfiFvbAttributes2, efi_guid::{EFI_VOL_GUID_SZ, EfiGuid}}}, util::{read_data_slice_n, read_data_slice_u8, read_data_slice_u16, read_data_slice_u32, read_data_slice_u64}};
 
 const ZERO_VECTOR_SIZE: usize = 0x10;
 
@@ -16,7 +17,8 @@ pub(crate) struct EfiFirmwareVolume {
     ext_header_offset: u16,
     reserved: [u8; 0x1],
     revision: u8,
-    block_map: Option<Vec<EfiFvBlockMapEntry>>
+    block_map: Option<Vec<EfiFvBlockMapEntry>>,
+    efi_ffs_files: HashMap<String, EfiFfsFile>,
 }
 
 impl EfiFirmwareVolume {
@@ -109,8 +111,15 @@ impl EfiFirmwareVolume {
             reserved,
             revision,
             block_map,
+            efi_ffs_files: HashMap::new(),
         })
 
+    }
+
+    // Eventually move this to using a tree structure.
+    fn load_files(data: Vec<u8>) -> UefiFvlResult<Self> {
+        let mut offset = 0;
+        todo!()
     }
 }
 

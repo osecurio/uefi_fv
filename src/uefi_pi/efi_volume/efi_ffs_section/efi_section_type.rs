@@ -1,21 +1,21 @@
-#[derive(Debug)]
+#[derive(Debug, Clone, Copy)]
 #[repr(u8)]
-pub(crate) enum EfiSectionType {
-//************************************************************
-// The section type EFI_SECTION_ALL is a pseudo type. It is
-// used as a wild card when retrieving sections. The section
-// type EFI_SECTION_ALL matches all section types.
-//************************************************************
+pub(crate) enum EfiSectionTypeId {
+    //************************************************************
+    // The section type EFI_SECTION_ALL is a pseudo type. It is
+    // used as a wild card when retrieving sections. The section
+    // type EFI_SECTION_ALL matches all section types.
+    //************************************************************
     EFI_SECTION_ALL = 0x00,
-//************************************************************
-// Encapsulation section Type values
-//************************************************************
+    //************************************************************
+    // Encapsulation section Type values
+    //************************************************************
     EFI_SECTION_COMPRESSION = 0x01,
     EFI_SECTION_GUID_DEFINED = 0x02,
     EFI_SECTION_DISPOSABLE = 0x03,
-//************************************************************
-// Leaf section Type values
-//************************************************************
+    //************************************************************
+    // Leaf section Type values
+    //************************************************************
     EFI_SECTION_PE32 = 0x10,
     EFI_SECTION_PIC = 0x11,
     EFI_SECTION_TE = 0x12,
@@ -33,7 +33,7 @@ pub(crate) enum EfiSectionType {
     EFI_SECTION_FAIL = 0xFF,
 }
 
-impl From<u8> for EfiSectionType {
+impl From<u8> for EfiSectionTypeId {
     fn from(value: u8) -> Self {
         match value {
             0x00 => Self::EFI_SECTION_ALL,
@@ -59,10 +59,10 @@ impl From<u8> for EfiSectionType {
 
 #[cfg(test)]
 mod tests {
-    use crate::uefi_pi::efi_volume::efi_common_section::efi_section_type::EfiSectionType;
+    use crate::uefi_pi::efi_volume::efi_ffs_section::efi_section_type::EfiSectionTypeId;
 
     #[test]
     fn test_efi_section_type_u8_repr() {
-        assert_eq!(EfiSectionType::EFI_SECTION_MM_DEPEX as u8, 0x1C);
+        assert_eq!(EfiSectionTypeId::EFI_SECTION_MM_DEPEX as u8, 0x1C);
     }
 }

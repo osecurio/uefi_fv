@@ -1,7 +1,16 @@
+use crate::uefi_pi::{UefiFvError, UefiFvlResult};
 
-
-pub fn read_data_slice_n(data: &[u8], offset: usize, len: usize) -> Vec<u8> {
-    data[offset..offset+len].to_vec()
+pub fn read_data_slice_n(data: &[u8], offset: usize, len: usize) -> UefiFvlResult<Vec<u8>> {
+    println!(
+        "datalen {:#X} - offset {:#X} - len {:#X}",
+        data.len(),
+        offset,
+        len
+    );
+    if data.len() < offset + len {
+        return Err(UefiFvError::Other);
+    }
+    Ok(data[offset..offset + len].to_vec())
 }
 
 pub fn read_data_slice_u8(data: &[u8], offset: usize) -> Option<u8> {
